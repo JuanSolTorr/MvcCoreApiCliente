@@ -2,16 +2,155 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .rural-scene {
+        position: relative;
+        overflow: hidden;
+        min-height: 80vh;
+        padding: 3rem 1rem;
+        border-radius: 24px;
+        background:
+            radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.85) 0 8%, transparent 9%),
+            radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.75) 0 6%, transparent 7%),
+            linear-gradient(180deg, #9ad8ff 0%, #b9e6ff 38%, #c3ec9b 39%, #76c96d 100%);
+        box-shadow: 0 20px 50px rgba(45, 90, 35, 0.25);
+        animation: skyGlow 8s ease-in-out infinite alternate;
+    }
+
+    .rural-scene::before,
+    .rural-scene::after {
+        content: "";
+        position: absolute;
+        width: 240px;
+        height: 70px;
+        top: 60px;
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 50px;
+        filter: blur(1px);
+        animation: cloudMove 16s linear infinite;
+    }
+
+    .rural-scene::before { left: -260px; }
+    .rural-scene::after {
+        top: 120px;
+        width: 180px;
+        height: 55px;
+        animation-duration: 20s;
+        animation-delay: -7s;
+    }
+
+    .birds {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .bird {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.9;
+        filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        animation: birdFly linear infinite;
+    }
+
+    .bird.b1 { top: 14%; left: -8%; animation-duration: 11s; }
+    .bird.b2 { top: 22%; left: -16%; animation-duration: 14s; animation-delay: -4s; }
+    .bird.b3 { top: 10%; left: -20%; animation-duration: 18s; animation-delay: -9s; }
+
+    .farm-card {
+        position: relative;
+        z-index: 1;
+        margin: 0 auto;
+        max-width: 900px;
+        padding: 2rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.65);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .rural-title {
+        font-weight: 800;
+        color: #2f5c2f;
+        text-shadow: 0 2px 0 #fff;
+        margin-bottom: 1.25rem;
+    }
+
+    #btnpersonas {
+        border: 0;
+        padding: 0.8rem 1.4rem;
+        border-radius: 999px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: #fff;
+        background: linear-gradient(135deg, #ffaf45, #ff7b33);
+        box-shadow: 0 8px 18px rgba(255, 123, 51, 0.4);
+        transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+        animation: pulse 2.2s infinite;
+    }
+
+    #btnpersonas:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 14px 24px rgba(255, 123, 51, 0.5);
+        filter: saturate(1.2);
+    }
+
+    #tablapersonas {
+        margin-top: 1.5rem;
+        border-radius: 16px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    #tablapersonas thead {
+        background: linear-gradient(90deg, #3f7d3d, #5da35a);
+        color: #fff;
+    }
+
+    #tablapersonas tbody tr {
+        transition: background-color .2s ease, transform .2s ease;
+    }
+
+    #tablapersonas tbody tr:hover {
+        background-color: #e9f8da;
+        transform: scale(1.01);
+    }
+
+    @@keyframes cloudMove {
+        from { transform: translateX(0); }
+        to { transform: translateX(calc(100vw + 400px)); }
+    }
+
+    @@keyframes birdFly {
+        from { transform: translateX(0) translateY(0) rotate(2deg); }
+        25% { transform: translateX(28vw) translateY(-12px) rotate(-3deg); }
+        50% { transform: translateX(56vw) translateY(8px) rotate(2deg); }
+        75% { transform: translateX(82vw) translateY(-10px) rotate(-2deg); }
+        to { transform: translateX(112vw) translateY(5px) rotate(1deg); }
+    }
+
+    @@keyframes pulse {
+        0%, 100% { box-shadow: 0 8px 18px rgba(255, 123, 51, 0.35); }
+        50% { box-shadow: 0 10px 26px rgba(255, 123, 51, 0.55); }
+    }
+
+    @@keyframes skyGlow {
+        from { filter: saturate(1); }
+        to { filter: saturate(1.15); }
+    }
+</style>
+
 @section Scripts {
     <script>
         $(document).ready(function(){
             $("#btnpersonas").click(function(){
                 let url = "https://apipersonasjst-dpc8b6a2chaqb0eh.germanywestcentral-01.azurewebsites.net/";
-                let request = "api/personas";
+                let request = "api/Personas";
                 $.ajax({
                     url: url + request,
                     method: "GET",
-                    succes: function(data){
+                    success: function(data){
                         console.log("Todo funciona");
                         var html = "";
                         $.each(data, function(index, persona)
@@ -31,18 +170,26 @@
     </script>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Api Personas Client</h1>
-    <button id="btnpersonas" class="btn btn-warning">Load personas</button>
-    <table class="table table-striped table-bordered" id="tablapersonas">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Edad</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<div class="rural-scene text-center">
+    <div class="birds">
+        <span class="bird b1">🐦</span>
+        <span class="bird b2">🕊️</span>
+        <span class="bird b3">🐦</span>
+    </div>
+
+    <div class="farm-card">
+        <h1 class="display-4 rural-title">Api Personas Client</h1>
+        <button id="btnpersonas" class="btn">Load personas</button>
+        <table class="table table-striped table-bordered" id="tablapersonas">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </div>
