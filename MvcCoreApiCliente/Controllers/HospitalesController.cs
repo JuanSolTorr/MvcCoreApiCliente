@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MvcCoreApiCliente.Models;
 using MvcCoreApiCliente.Services;
 
 namespace MvcCoreApiCliente.Controllers
@@ -25,7 +26,13 @@ namespace MvcCoreApiCliente.Controllers
 
         public IActionResult Cliente()
         {
-                return View();
+            return View();
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            Hospital hospital = await this.service.FindHospitalAsync(id);
+            return View(hospital);
         }
     }
 }
