@@ -1,0 +1,43 @@
+﻿<h1>Api Hospitales Cliente</h1>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $("#btnhospitales").click(function(){
+                let url = "https://apicorehospitalesjst.azurewebsites.net/";
+                let request = "api/Hospitales";
+                $.ajax({
+                    url: url + request,
+                    method: "GET",
+                    success: function(data){
+                        console.log("leyendo...");
+                        var html = "";
+                        $.each(data, function(index, hospital)
+                        {
+                            html += "<tr>";
+                            html += "<td>" + hospital.nombre + "</td>";
+                            html += "<td>" + hospital.direccion + "</td>";
+                            html += "<td>" + hospital.telefono + "</td>";
+                            html += "<td>" + hospital.numCama + "</td>";
+                            html += "</tr>";
+                        })
+                        $("#tablahospitales tbody").html(html);
+                    }
+                })
+            })
+        })
+    </script>
+}
+<button id="btnhospitales" class="btn btn-primary mb-3">Cargar Hospitales</button>
+<table id="tablahospitales" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Camas</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

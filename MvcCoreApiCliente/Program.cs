@@ -1,6 +1,10 @@
+using MvcCoreApiCliente.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<ServiceHospitales>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -22,7 +26,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Hospitales}/{action=Cliente}/{id?}")
     .WithStaticAssets();
 
 
